@@ -8,7 +8,7 @@
 - [x] 1.6 設定 Program.cs（Identity、JWT、Swagger、CORS、PostgreSQL 連線、自動 Migration）
 - [x] 1.7 建立統一回應格式 ApiResponse<T> 與 ExceptionHandlingMiddleware
 - [x] 1.8 建立種子資料（三個角色 + ianadmin 預設帳號）
-- [ ] 1.9 建立首次 EF Core Migration 並驗證資料庫建立成功
+- [x] 1.9 建立首次 EF Core Migration 並驗證資料庫建立成功
 
 ## 2. 後端認證 API
 
