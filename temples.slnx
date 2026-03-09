@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Temples.Api/Temples.Api.csproj" />
+    <Project Path="src/Temples.Core/Temples.Core.csproj" />
+    <Project Path="src/Temples.Infrastructure/Temples.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Temples.Tests/Temples.Tests.csproj" />
+  </Folder>
+</Solution>
