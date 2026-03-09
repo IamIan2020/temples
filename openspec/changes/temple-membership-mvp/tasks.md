@@ -12,13 +12,13 @@
 
 ## 2. 後端認證 API
 
-- [ ] 2.1 建立 Auth DTOs（RegisterRequest、LoginRequest、LoginResponse、ForgotPasswordRequest、ResetPasswordRequest、RefreshTokenRequest）
-- [ ] 2.2 建立 Auth FluentValidation Validators
-- [ ] 2.3 實作 IEmailService + EmailService（MailKit + Gmail SMTP）
-- [ ] 2.4 實作 IAuthService + AuthService（註冊、登入、JWT 產生、Refresh Token、忘記密碼、重設密碼）
-- [ ] 2.5 實作 AuthController（所有認證端點）
-- [ ] 2.6 註冊所有認證相關服務至 DI Container
-- [ ] 2.7 驗證認證 API（編譯成功 + Swagger 測試）
+- [x] 2.1 建立 Auth DTOs（RegisterRequest、LoginRequest、LoginResponse、ForgotPasswordRequest、ResetPasswordRequest、RefreshTokenRequest）
+- [x] 2.2 建立 Auth FluentValidation Validators
+- [x] 2.3 實作 IEmailService + EmailService（MailKit + Gmail SMTP）
+- [x] 2.4 實作 IAuthService + AuthService（註冊、登入、JWT 產生、Refresh Token、忘記密碼、重設密碼）
+- [x] 2.5 實作 AuthController（所有認證端點）
+- [x] 2.6 註冊所有認證相關服務至 DI Container
+- [x] 2.7 驗證認證 API（編譯成功 + Swagger 測試）
 
 ## 3. 後端會員管理 API
 

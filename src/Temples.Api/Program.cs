@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Temples.Core.Entities;
+using FluentValidation;
 using Temples.Api.Middleware;
+using Temples.Core.Validators.Auth;
+using Temples.Infrastructure;
 using Temples.Infrastructure.Data;
 using static Temples.Infrastructure.Data.SeedData;
 
@@ -69,6 +72,12 @@ builder.Services.AddCors(options =>
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// FluentValidation
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+
+// 應用程式服務
+builder.Services.AddApplicationServices();
 
 // Controllers
 builder.Services.AddControllers();
