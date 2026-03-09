@@ -84,7 +84,10 @@ E:\Web\temples\frontend\
 │   │   ├── RegisterView.vue
 │   │   ├── ForgotPasswordView.vue
 │   │   ├── ResetPasswordView.vue
-│   │   └── ProfileView.vue
+│   │   ├── ProfileView.vue
+│   │   └── admin\
+│   │       ├── MemberListView.vue           # 後台會員列表
+│   │       └── MemberDetailView.vue         # 後台會員詳情/編輯
 │   ├── components\layout\
 │   ├── router\index.ts
 │   └── App.vue
@@ -116,6 +119,90 @@ Identity 自動建立：AspNetUsers, AspNetRoles, AspNetUserRoles, AspNetUserTok
 
 ---
 
+## 角色權限設計
+
+使用 ASP.NET Core Identity 的 Role-Based Access Control (RBAC)，透過 `AspNetRoles` + `AspNetUserRoles` 管理。
+
+### 角色定義
+
+| 角色 | 英文名稱 | 說明 |
+|------|----------|------|
+| 系統管理員 | `SystemAdmin` | 最高權限，可管理所有管理員與會員、系統設定 |
+| 網站管理員 | `WebAdmin` | 可管理會員與網站內容，但不能管理管理員帳號 |
+| 一般會員 | `Member` | 只能查看/修改自己的資料 |
+
+### 權限矩陣
+
+| 功能 | SystemAdmin | WebAdmin | Member |
+|------|:-----------:|:--------:|:------:|
+| 查看/修改自己的 Profile | ✅ | ✅ | ✅ |
+| 變更自己的密碼 | ✅ | ✅ | ✅ |
+| 會員列表（分頁+搜尋） | ✅ | ✅ | ❌ |
+| 查看指定會員資料 | ✅ | ✅ | ❌ |
+| 停用/啟用會員 | ✅ | ✅ | ❌ |
+| 變更會員角色 | ✅ | ❌ | ❌ |
+| 管理 WebAdmin 帳號 | ✅ | ❌ | ❌ |
+| 管理 SystemAdmin 帳號 | ✅ | ❌ | ❌ |
+| 系統設定 | ✅ | ❌ | ❌ |
+
+### 密碼加密方式
+
+使用 ASP.NET Core Identity 內建的 **PBKDF2** 加密：
+
+- **演算法**：HMAC-SHA256
+- **迭代次數**：100,000 次
+- **Salt**：每個密碼自動產生 128-bit 隨機 salt
+- **輸出**：256-bit 雜湊值，Base64 編碼後存入資料庫
+- **特性**：單向雜湊，無法反解
+
+### 預設種子帳號
+
+| 帳號 | 密碼 | 角色 | 說明 |
+|------|------|------|------|
+| `ianadmin` | `my0919linda!` | SystemAdmin | 系統預設管理員 |
+
+> ⚠️ 種子帳號密碼僅用於開發環境，正式上線前務必變更密碼。
+
+### 種子資料程式碼
+
+在 `Program.cs` 或獨立的 `SeedData.cs` 中執行：
+
+```csharp
+public static async Task SeedRolesAndAdmin(IServiceProvider serviceProvider)
+{
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+    // 建立角色
+    string[] roles = { "SystemAdmin", "WebAdmin", "Member" };
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+            await roleManager.CreateAsync(new IdentityRole(role));
+    }
+
+    // 建立預設系統管理員
+    var adminEmail = "ianadmin@system.local";
+    var adminUser = await userManager.FindByNameAsync("ianadmin");
+    if (adminUser == null)
+    {
+        adminUser = new ApplicationUser
+        {
+            UserName = "ianadmin",
+            Email = adminEmail,
+            DisplayName = "系統管理員",
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow,
+            EmailConfirmed = true
+        };
+        await userManager.CreateAsync(adminUser, "my0919linda!");
+        await userManager.AddToRoleAsync(adminUser, "SystemAdmin");
+    }
+}
+```
+
+---
+
 ## API 端點
 
 ### 認證 `/api/auth`
@@ -135,9 +222,11 @@ Identity 自動建立：AspNetUsers, AspNetRoles, AspNetUserRoles, AspNetUserTok
 | GET | `/api/members/me` | 取得自己的 profile | 是 |
 | PUT | `/api/members/me` | 更新自己的 profile | 是 |
 | PUT | `/api/members/me/password` | 變更密碼 | 是 |
-| GET | `/api/members` | 會員列表（分頁+搜尋） | 是（Admin） |
-| GET | `/api/members/{id}` | 取得指定會員 | 是（Admin） |
-| DELETE | `/api/members/{id}` | 停用會員 | 是（Admin） |
+| GET | `/api/members` | 會員列表（分頁+搜尋） | 是（WebAdmin+） |
+| GET | `/api/members/{id}` | 取得指定會員 | 是（WebAdmin+） |
+| PUT | `/api/members/{id}/role` | 變更會員角色 | 是（SystemAdmin） |
+| PUT | `/api/members/{id}/status` | 啟用/停用會員 | 是（WebAdmin+） |
+| DELETE | `/api/members/{id}` | 停用會員 | 是（WebAdmin+） |
 
 ### 統一回應格式
 
@@ -185,7 +274,7 @@ Identity 自動建立：AspNetUsers, AspNetRoles, AspNetUserRoles, AspNetUserTok
 6. 建立 AppDbContext (繼承 IdentityDbContext)
 7. 設定 Program.cs（Identity, JWT, Swagger, CORS, PostgreSQL 連線）
 8. 建立首次 Migration
-9. 種子資料（預設 Admin 角色 + 帳號）
+9. 種子資料（建立 SystemAdmin / WebAdmin / Member 三個角色 + ianadmin 預設帳號）
 
 ### Phase 2: 後端認證 API
 1. 建立 Auth DTOs
@@ -199,7 +288,7 @@ Identity 自動建立：AspNetUsers, AspNetRoles, AspNetUserRoles, AspNetUserTok
 1. 建立 Member DTOs
 2. 實作 IMemberService + MemberService
 3. 實作 MembersController
-4. 加入 Authorization Policy（Admin 限制）
+4. 加入 Authorization Policy（SystemAdmin / WebAdmin / Member 角色權限控制）
 5. 實作 ExceptionHandlingMiddleware
 6. 測試會員 API
 
@@ -213,13 +302,16 @@ Identity 自動建立：AspNetUsers, AspNetRoles, AspNetUserRoles, AspNetUserTok
 7. 建立 Pinia auth store
 
 ### Phase 5: 前端頁面
-1. Layout 元件（Header + Footer）
+1. Layout 元件（Header + Footer + 根據角色顯示導航選單）
 2. 登入頁面
 3. 註冊頁面
 4. 忘記密碼頁面
 5. 重設密碼頁面
 6. 會員個人資料頁面
-7. 前後端聯調測試
+7. 後台會員列表頁面（WebAdmin+ 可見，含分頁+搜尋）
+8. 後台會員詳情/編輯頁面（WebAdmin+ 可見，SystemAdmin 可改角色）
+9. 前端路由守衛（根據角色限制後台頁面存取）
+10. 前後端聯調測試
 
 ### Phase 6: 收尾
 1. 完整流程測試

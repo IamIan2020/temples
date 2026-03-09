@@ -1,0 +1,16 @@
+ 使用方式
+
+  以系統管理員開啟 PowerShell，執行：
+
+  cd D:\web\temples
+  .\deploy.ps1
+
+  腳本會自動：
+  1. 備份 web.config（保留你的自訂設定）
+  2. 停止 IIS 站台
+  3. 發布後端（dotnet publish）
+  4. 建置前端（npm run build）+ 複製到 wwwroot
+  5. 還原 web.config
+  6. 啟動 IIS 站台
+
+  改完程式碼跑一次就部署完成。

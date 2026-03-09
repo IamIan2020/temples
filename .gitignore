@@ -36,9 +36,13 @@ dist/
 dist-ssr/
 *.local
 
-# Editor
+# Editor / IDE
 .vscode/
 .idea/
+.vs/
+
+# Claude Code
+.claude/
 *.swp
 *.swo
 *~

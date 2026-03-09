@@ -44,22 +44,28 @@
 
 ### Requirement: 路由與導航守衛
 
-前端 SHALL 設定 Vue Router，包含以下路由：
-- 公開路由：登入、註冊、忘記密碼、重設密碼
-- 會員路由：個人資料（需登入）
-- 後台路由：會員列表、會員詳情（需 WebAdmin+ 角色）
+前端 SHALL 設定 Vue Router，路由分為兩大區塊：
+- 前台路由（`/`）：登入、註冊、忘記密碼、重設密碼、個人資料（需登入）
+- 後台路由（`/backstage`）：後台登入、會員列表、會員詳情（需 WebAdmin+ 角色）
 
-導航守衛 MUST 檢查認證狀態和角色權限。
+導航守衛 MUST 檢查認證狀態和角色權限：
+- 前台受保護路由：未登入導向 `/login`
+- 後台路由：未登入導向 `/backstage/login`，Member 角色導向 `/profile`
 
-#### Scenario: 未登入存取會員頁面
+#### Scenario: 未登入存取前台受保護頁面
 
-- **WHEN** 未登入的使用者存取個人資料頁面
-- **THEN** 系統導向登入頁面
+- **WHEN** 未登入的使用者存取 `/profile`
+- **THEN** 系統導向 `/login`
+
+#### Scenario: 未登入存取後台頁面
+
+- **WHEN** 未登入的使用者存取 `/backstage/members`
+- **THEN** 系統導向 `/backstage/login`
 
 #### Scenario: Member 存取後台頁面
 
-- **WHEN** Member 角色的使用者存取後台會員列表
-- **THEN** 系統導向 403 頁面或首頁
+- **WHEN** Member 角色的使用者存取 `/backstage/members`
+- **THEN** 系統導向 `/profile`
 
 ### Requirement: 登入頁面
 
@@ -161,17 +167,21 @@
 
 ### Requirement: Layout 元件
 
-前端 SHALL 提供 Layout 元件，包含 Header（顯示系統名稱、使用者名稱、登出按鈕）和側邊導航選單。導航選單 MUST 根據角色動態顯示：Member 只顯示個人資料，WebAdmin+ 額外顯示後台管理選單。
+前端 SHALL 提供兩個獨立的 Layout 元件：
+- `PublicLayout.vue`：前台使用，簡潔 Header（無側邊欄）
+- `AdminLayout.vue`：後台使用，Header + 側邊導航欄
 
-#### Scenario: Member 角色導航
+各 Layout 根據其使用場景獨立設計，不共用同一元件。
 
-- **WHEN** Member 角色登入
-- **THEN** 導航選單只顯示「個人資料」
+#### Scenario: 前台頁面使用 PublicLayout
 
-#### Scenario: WebAdmin 角色導航
+- **WHEN** 使用者瀏覽前台路由（`/login`、`/profile` 等）
+- **THEN** 頁面使用 PublicLayout 渲染
 
-- **WHEN** WebAdmin 角色登入
-- **THEN** 導航選單顯示「個人資料」和「會員管理」
+#### Scenario: 後台頁面使用 AdminLayout
+
+- **WHEN** 管理員瀏覽後台路由（`/backstage/*`）
+- **THEN** 頁面使用 AdminLayout 渲染
 
 ### Requirement: TypeScript 類型與後端 DTO 一致
 
