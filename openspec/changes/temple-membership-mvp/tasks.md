@@ -22,12 +22,12 @@
 
 ## 3. 後端會員管理 API
 
-- [ ] 3.1 建立 Member DTOs（MemberProfileResponse、UpdateProfileRequest、ChangePasswordRequest、MemberListRequest、MemberDetailResponse、ChangeRoleRequest、ChangeStatusRequest）
-- [ ] 3.2 建立 Member FluentValidation Validators
-- [ ] 3.3 實作 IMemberService + MemberService（Profile CRUD、會員列表分頁搜尋、角色變更、狀態變更）
-- [ ] 3.4 實作 MembersController（所有會員端點 + Authorization Policy）
-- [ ] 3.5 註冊會員相關服務至 DI Container
-- [ ] 3.6 驗證會員 API（編譯成功 + Swagger 測試）
+- [x] 3.1 建立 Member DTOs（MemberProfileResponse、UpdateProfileRequest、ChangePasswordRequest、MemberListRequest、MemberDetailResponse、ChangeRoleRequest、ChangeStatusRequest）
+- [x] 3.2 建立 Member FluentValidation Validators
+- [x] 3.3 實作 IMemberService + MemberService（Profile CRUD、會員列表分頁搜尋、角色變更、狀態變更）
+- [x] 3.4 實作 MembersController（所有會員端點 + Authorization Policy）
+- [x] 3.5 註冊會員相關服務至 DI Container
+- [x] 3.6 驗證會員 API（編譯成功 + Swagger 測試）
 
 ## 4. 後端測試
 
