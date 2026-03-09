@@ -62,7 +62,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", "https://ianx75.tplinkdns.com", "http://ianx75.tplinkdns.com")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -104,6 +104,14 @@ app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
+
+// 靜態檔案（前端 SPA）
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.MapControllers();
+
+// SPA fallback：非 API 路由都回傳 index.html
+app.MapFallbackToFile("index.html");
 
 app.Run();
