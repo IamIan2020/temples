@@ -50,14 +50,14 @@ Write-Host "      OK" -ForegroundColor Green
 Write-Host "[4/6] Build frontend..." -ForegroundColor Yellow
 $frontendPath = "$ProjectRoot\frontend"
 Push-Location $frontendPath
-npm run build --silent 2>&1 | Out-Null
-if ($LASTEXITCODE -ne 0) {
-    npm run build
-    if ($LASTEXITCODE -ne 0) {
-        Pop-Location
-        Write-Host "      Frontend build FAILED!" -ForegroundColor Red
-        exit 1
-    }
+$ErrorActionPreference = "Continue"
+npm run build 2>&1 | ForEach-Object { $_.ToString() } | Out-Null
+$buildExit = $LASTEXITCODE
+$ErrorActionPreference = "Stop"
+if ($buildExit -ne 0) {
+    Pop-Location
+    Write-Host "      Frontend build FAILED!" -ForegroundColor Red
+    exit 1
 }
 Pop-Location
 
