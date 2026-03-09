@@ -32,8 +32,11 @@ public static class SeedData
                 CreatedAt = DateTime.UtcNow,
                 EmailConfirmed = true
             };
-            await userManager.CreateAsync(adminUser, "my0919linda!");
-            await userManager.AddToRoleAsync(adminUser, "SystemAdmin");
+            var result = await userManager.CreateAsync(adminUser, "My0919linda!");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(adminUser, "SystemAdmin");
+            }
         }
     }
 }

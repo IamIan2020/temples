@@ -48,7 +48,7 @@ dotnet run
 
 後端會自動執行 Migration 並建立種子資料（角色 + 預設管理員）。
 
-Swagger UI: https://localhost:5001/swagger
+Swagger UI: http://localhost:5135/swagger
 
 ### 4. 啟動前端
 
@@ -64,7 +64,7 @@ npm run dev
 
 | 帳號 | 密碼 | 角色 |
 |------|------|------|
-| ianadmin | my0919linda! | SystemAdmin |
+| ianadmin | My0919linda! | SystemAdmin |
 
 > ⚠️ 正式上線前請變更預設密碼。
 
