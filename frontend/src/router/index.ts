@@ -4,51 +4,76 @@ import { useAuthStore } from '../stores/auth'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    // 前台路由（使用 PublicLayout）
+    {
+      path: '/',
+      component: () => import('../components/layout/PublicLayout.vue'),
+      children: [
+        {
+          path: '',
+          redirect: '/profile',
+        },
+        {
+          path: 'profile',
+          name: 'Profile',
+          component: () => import('../views/public/ProfileView.vue'),
+          meta: { requiresAuth: true },
+        },
+      ],
+    },
+    // 前台公開頁面（不使用 Layout）
     {
       path: '/login',
       name: 'Login',
-      component: () => import('../views/LoginView.vue'),
+      component: () => import('../views/public/LoginView.vue'),
       meta: { guest: true },
     },
     {
       path: '/register',
       name: 'Register',
-      component: () => import('../views/RegisterView.vue'),
+      component: () => import('../views/public/RegisterView.vue'),
       meta: { guest: true },
     },
     {
       path: '/forgot-password',
       name: 'ForgotPassword',
-      component: () => import('../views/ForgotPasswordView.vue'),
+      component: () => import('../views/public/ForgotPasswordView.vue'),
       meta: { guest: true },
     },
     {
       path: '/reset-password',
       name: 'ResetPassword',
-      component: () => import('../views/ResetPasswordView.vue'),
+      component: () => import('../views/public/ResetPasswordView.vue'),
       meta: { guest: true },
     },
+    // 後台登入頁面（不使用 Layout）
     {
-      path: '/',
-      redirect: '/profile',
+      path: '/backstage/login',
+      name: 'BackstageLogin',
+      component: () => import('../views/backstage/LoginView.vue'),
+      meta: { guest: true, backstageGuest: true },
     },
+    // 後台路由（使用 AdminLayout）
     {
-      path: '/profile',
-      name: 'Profile',
-      component: () => import('../views/ProfileView.vue'),
-      meta: { requiresAuth: true },
-    },
-    {
-      path: '/admin/members',
-      name: 'MemberList',
-      component: () => import('../views/admin/MemberListView.vue'),
-      meta: { requiresAuth: true, roles: ['SystemAdmin', 'WebAdmin'] },
-    },
-    {
-      path: '/admin/members/:id',
-      name: 'MemberDetail',
-      component: () => import('../views/admin/MemberDetailView.vue'),
-      meta: { requiresAuth: true, roles: ['SystemAdmin', 'WebAdmin'] },
+      path: '/backstage',
+      component: () => import('../components/layout/AdminLayout.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+      children: [
+        {
+          path: '',
+          redirect: '/backstage/members',
+        },
+        {
+          path: 'members',
+          name: 'MemberList',
+          component: () => import('../views/backstage/MemberListView.vue'),
+        },
+        {
+          path: 'members/:id',
+          name: 'MemberDetail',
+          component: () => import('../views/backstage/MemberDetailView.vue'),
+        },
+      ],
     },
   ],
 })
@@ -56,20 +81,31 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
   const authStore = useAuthStore()
 
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+  // 後台路由：需要登入 + 管理員角色
+  if (to.meta.requiresAdmin) {
+    if (!authStore.isAuthenticated) {
+      return next({ name: 'BackstageLogin' })
+    }
+    if (!authStore.isAdmin) {
+      return next({ name: 'Profile' })
+    }
+  }
+
+  // 前台受保護路由：需要登入
+  if (to.meta.requiresAuth && !to.meta.requiresAdmin && !authStore.isAuthenticated) {
     return next({ name: 'Login' })
   }
 
+  // Guest 頁面：已登入時重導
   if (to.meta.guest && authStore.isAuthenticated) {
-    return next({ name: 'Profile' })
-  }
-
-  if (to.meta.roles) {
-    const requiredRoles = to.meta.roles as string[]
-    const hasRole = authStore.userRoles.some((r) => requiredRoles.includes(r))
-    if (!hasRole) {
+    if (to.meta.backstageGuest) {
+      // 後台登入頁：已登入的管理員導向後台
+      if (authStore.isAdmin) {
+        return next({ name: 'MemberList' })
+      }
       return next({ name: 'Profile' })
     }
+    return next({ name: 'Profile' })
   }
 
   next()

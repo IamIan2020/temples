@@ -27,7 +27,7 @@
         </el-table-column>
         <el-table-column label="操作" width="100">
           <template #default="{ row }">
-            <el-button type="primary" size="small" @click="router.push(`/admin/members/${row.id}`)">查看</el-button>
+            <el-button type="primary" size="small" @click="router.push(`/backstage/members/${row.id}`)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>

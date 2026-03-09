@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { authApi } from '../api/auth'
+import { authApi } from '../../api/auth'
 import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 

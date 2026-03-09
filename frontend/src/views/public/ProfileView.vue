@@ -51,10 +51,10 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { membersApi } from '../api/members'
+import { membersApi } from '../../api/members'
 import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
-import type { MemberProfileResponse } from '../types/api'
+import type { MemberProfileResponse } from '../../types/api'
 
 const profileFormRef = ref<FormInstance>()
 const passwordFormRef = ref<FormInstance>()

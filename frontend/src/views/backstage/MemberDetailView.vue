@@ -1,7 +1,7 @@
 <template>
   <div style="max-width: 600px; margin: 0 auto">
     <div style="display: flex; align-items: center; margin-bottom: 16px">
-      <el-button @click="router.push('/admin/members')">← 返回列表</el-button>
+      <el-button @click="router.push('/backstage/members')">← 返回列表</el-button>
       <h2 style="margin: 0 0 0 16px">會員詳情</h2>
     </div>
 

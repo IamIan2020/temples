@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
+import { useAuthStore } from '../../stores/auth'
 import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 
