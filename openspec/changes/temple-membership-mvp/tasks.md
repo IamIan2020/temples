@@ -37,26 +37,26 @@
 
 ## 5. 前端專案建立
 
-- [ ] 5.1 用 Vite 初始化 Vue 3 + TypeScript 專案
-- [ ] 5.2 安裝前端套件（Element Plus、Axios、Pinia、Vue Router、icons）
-- [ ] 5.3 設定 Vite proxy 代理後端 API
-- [ ] 5.4 建立 Axios client + JWT interceptor（自動附加 Token、401 自動刷新）
-- [ ] 5.5 建立 TypeScript 類型定義（對應後端所有 DTO）
-- [ ] 5.6 建立 API 呼叫層（auth.ts、members.ts）
-- [ ] 5.7 建立 Pinia auth store（登入、登出、註冊、Token 管理）
-- [ ] 5.8 設定 Vue Router + 導航守衛（認證檢查、角色權限檢查）
+- [x] 5.1 用 Vite 初始化 Vue 3 + TypeScript 專案
+- [x] 5.2 安裝前端套件（Element Plus、Axios、Pinia、Vue Router、icons）
+- [x] 5.3 設定 Vite proxy 代理後端 API
+- [x] 5.4 建立 Axios client + JWT interceptor（自動附加 Token、401 自動刷新）
+- [x] 5.5 建立 TypeScript 類型定義（對應後端所有 DTO）
+- [x] 5.6 建立 API 呼叫層（auth.ts、members.ts）
+- [x] 5.7 建立 Pinia auth store（登入、登出、註冊、Token 管理）
+- [x] 5.8 設定 Vue Router + 導航守衛（認證檢查、角色權限檢查）
 
 ## 6. 前端頁面
 
-- [ ] 6.1 建立 Layout 元件（Header + 側邊導航，根據角色動態顯示選單）
-- [ ] 6.2 建立登入頁面（Email + 密碼表單、驗證、錯誤處理）
-- [ ] 6.3 建立註冊頁面（Email + 密碼 + 確認密碼 + 顯示名稱表單）
-- [ ] 6.4 建立忘記密碼頁面（Email 輸入表單）
-- [ ] 6.5 建立重設密碼頁面（從 URL 取得 Token，新密碼表單）
-- [ ] 6.6 建立個人資料頁面（顯示/編輯 Profile + 變更密碼）
-- [ ] 6.7 建立後台會員列表頁面（分頁表格 + 搜尋）
-- [ ] 6.8 建立後台會員詳情頁面（查看/編輯 + 停用/啟用 + 角色變更）
-- [ ] 6.9 前端編譯驗證（npm run build 成功且無錯誤）
+- [x] 6.1 建立 Layout 元件（Header + 側邊導航，根據角色動態顯示選單）
+- [x] 6.2 建立登入頁面（Email + 密碼表單、驗證、錯誤處理）
+- [x] 6.3 建立註冊頁面（Email + 密碼 + 確認密碼 + 顯示名稱表單）
+- [x] 6.4 建立忘記密碼頁面（Email 輸入表單）
+- [x] 6.5 建立重設密碼頁面（從 URL 取得 Token，新密碼表單）
+- [x] 6.6 建立個人資料頁面（顯示/編輯 Profile + 變更密碼）
+- [x] 6.7 建立後台會員列表頁面（分頁表格 + 搜尋）
+- [x] 6.8 建立後台會員詳情頁面（查看/編輯 + 停用/啟用 + 角色變更）
+- [x] 6.9 前端編譯驗證（npm run build 成功且無錯誤）
 
 ## 7. 整合與收尾
 
