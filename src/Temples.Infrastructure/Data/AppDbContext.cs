@@ -6,6 +6,8 @@ namespace Temples.Infrastructure.Data;
 
 public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
+    public DbSet<SystemSetting> SystemSettings { get; set; } = null!;
+
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }

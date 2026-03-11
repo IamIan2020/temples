@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Temples.Core.Entities;
 
@@ -10,6 +11,7 @@ public static class SeedData
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var dbContext = serviceProvider.GetRequiredService<AppDbContext>();
 
         // 建立角色
         string[] roles = ["SystemAdmin", "WebAdmin", "Member"];
@@ -37,6 +39,21 @@ public static class SeedData
             {
                 await userManager.AddToRoleAsync(adminUser, "SystemAdmin");
             }
+        }
+
+        // 建立預設系統設定
+        if (!await dbContext.SystemSettings.AnyAsync())
+        {
+            dbContext.SystemSettings.Add(new SystemSetting
+            {
+                Id = 1,
+                CompanyName = "宮廟系統",
+                WebsiteName = "宮廟系統",
+                Copyright = "© 2026 宮廟系統",
+                SessionTimeoutMinutes = 30,
+                UpdatedAt = DateTime.UtcNow
+            });
+            await dbContext.SaveChangesAsync();
         }
     }
 }
