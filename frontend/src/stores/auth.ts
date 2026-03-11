@@ -21,6 +21,14 @@ export const useAuthStore = defineStore('auth', () => {
       accessToken.value = storedToken
       user.value = JSON.parse(storedUser)
     }
+
+    // 跨 Tab 登出同步
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'accessToken' && !event.newValue) {
+        user.value = null
+        accessToken.value = null
+      }
+    })
   }
 
   async function login(data: LoginRequest) {

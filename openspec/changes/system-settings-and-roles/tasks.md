@@ -24,11 +24,11 @@
 
 ## 3. 自動登出
 
-- [ ] 3.1 建立 useIdleTimeout composable（監聽活動事件、計時器、警告觸發）
-- [ ] 3.2 建立 IdleWarningDialog 元件（el-dialog 倒數計時、繼續使用/立即登出按鈕）
-- [ ] 3.3 整合到 AdminLayout 和 PublicLayout（已登入時啟動閒置偵測）
-- [ ] 3.4 實作跨 Tab 登出同步（監聽 localStorage storage 事件）
-- [ ] 3.5 驗證 npm run build 成功
+- [x] 3.1 建立 useIdleTimeout composable（監聽活動事件、計時器、警告觸發）
+- [x] 3.2 建立 IdleWarningDialog 元件（el-dialog 倒數計時、繼續使用/立即登出按鈕）
+- [x] 3.3 整合到 AdminLayout 和 PublicLayout（已登入時啟動閒置偵測）
+- [x] 3.4 實作跨 Tab 登出同步（監聯 localStorage storage 事件）
+- [x] 3.5 驗證 npm run build 成功
 
 ## 4. 權限管理 - 後端
 

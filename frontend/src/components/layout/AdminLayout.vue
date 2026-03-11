@@ -40,6 +40,12 @@
         <router-view />
       </el-main>
     </el-container>
+    <IdleWarningDialog
+      :visible="idleTimeout.showWarning.value"
+      :remaining-seconds="idleTimeout.remainingSeconds.value"
+      @extend="idleTimeout.extend"
+      @logout="handleIdleLogout"
+    />
   </el-container>
 </template>
 
@@ -47,15 +53,23 @@
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
 import { useSettingsStore } from '../../stores/settings'
+import { useIdleTimeout } from '../../composables/useIdleTimeout'
+import IdleWarningDialog from '../IdleWarningDialog.vue'
 import { UserFilled, Setting } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
+const idleTimeout = useIdleTimeout()
 
 const handleLogout = () => {
   authStore.logout()
+  router.push('/backstage/login')
+}
+
+const handleIdleLogout = () => {
+  idleTimeout.doLogout()
   router.push('/backstage/login')
 }
 </script>
