@@ -101,9 +101,17 @@ export interface ChangeStatusRequest {
 
 // Settings DTOs
 export interface PublicSettingResponse {
+  companyName: string
   websiteName: string
+  phone: string | null
   copyright: string
   sessionTimeoutMinutes: number
+  address: string | null
+  fax: string | null
+  lineUrl: string | null
+  facebookUrl: string | null
+  googleMapUrl: string | null
+  logoUrl: string | null
 }
 
 export interface SystemSettingResponse {
@@ -114,6 +122,12 @@ export interface SystemSettingResponse {
   taxId: string | null
   copyright: string
   sessionTimeoutMinutes: number
+  address: string | null
+  fax: string | null
+  lineUrl: string | null
+  facebookUrl: string | null
+  googleMapUrl: string | null
+  logoUrl: string | null
   updatedAt: string
 }
 
@@ -124,6 +138,12 @@ export interface UpdateSystemSettingRequest {
   taxId: string | null
   copyright: string
   sessionTimeoutMinutes: number
+  address: string | null
+  fax: string | null
+  lineUrl: string | null
+  facebookUrl: string | null
+  googleMapUrl: string | null
+  logoUrl: string | null
 }
 
 // Role DTOs

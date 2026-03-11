@@ -27,5 +27,29 @@ public class UpdateSystemSettingRequestValidator : AbstractValidator<UpdateSyste
 
         RuleFor(x => x.SessionTimeoutMinutes)
             .InclusiveBetween(1, 480).WithMessage("登出時間必須在 1 到 480 分鐘之間");
+
+        RuleFor(x => x.Address)
+            .MaximumLength(500).WithMessage("地址不得超過 500 字元");
+
+        RuleFor(x => x.Fax)
+            .MaximumLength(50).WithMessage("傳真不得超過 50 字元");
+
+        RuleFor(x => x.LineUrl)
+            .MaximumLength(500).WithMessage("LINE URL 不得超過 500 字元")
+            .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            .WithMessage("LINE URL 格式不正確");
+
+        RuleFor(x => x.FacebookUrl)
+            .MaximumLength(500).WithMessage("Facebook URL 不得超過 500 字元")
+            .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            .WithMessage("Facebook URL 格式不正確");
+
+        RuleFor(x => x.GoogleMapUrl)
+            .MaximumLength(500).WithMessage("Google Map URL 不得超過 500 字元")
+            .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            .WithMessage("Google Map URL 格式不正確");
+
+        RuleFor(x => x.LogoUrl)
+            .MaximumLength(500).WithMessage("Logo URL 不得超過 500 字元");
     }
 }

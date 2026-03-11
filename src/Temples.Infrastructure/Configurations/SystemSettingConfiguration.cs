@@ -14,5 +14,11 @@ public class SystemSettingConfiguration : IEntityTypeConfiguration<SystemSetting
         builder.Property(s => s.Phone).HasMaxLength(50);
         builder.Property(s => s.TaxId).HasMaxLength(20);
         builder.Property(s => s.Copyright).IsRequired().HasMaxLength(500);
+        builder.Property(s => s.Address).HasMaxLength(500);
+        builder.Property(s => s.Fax).HasMaxLength(50);
+        builder.Property(s => s.LineUrl).HasMaxLength(500);
+        builder.Property(s => s.FacebookUrl).HasMaxLength(500);
+        builder.Property(s => s.GoogleMapUrl).HasMaxLength(500);
+        builder.Property(s => s.LogoUrl).HasMaxLength(500);
     }
 }

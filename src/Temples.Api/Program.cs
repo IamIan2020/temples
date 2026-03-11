@@ -110,6 +110,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// 確保 uploads 目錄存在
+var uploadsPath = Path.Combine(app.Environment.WebRootPath ?? Path.Combine(app.Environment.ContentRootPath, "wwwroot"), "uploads");
+Directory.CreateDirectory(uploadsPath);
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");

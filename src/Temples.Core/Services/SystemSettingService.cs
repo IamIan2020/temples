@@ -24,6 +24,12 @@ public class SystemSettingService : ISystemSettingService
             TaxId = setting.TaxId,
             Copyright = setting.Copyright,
             SessionTimeoutMinutes = setting.SessionTimeoutMinutes,
+            Address = setting.Address,
+            Fax = setting.Fax,
+            LineUrl = setting.LineUrl,
+            FacebookUrl = setting.FacebookUrl,
+            GoogleMapUrl = setting.GoogleMapUrl,
+            LogoUrl = setting.LogoUrl,
             UpdatedAt = setting.UpdatedAt
         };
     }
@@ -33,9 +39,17 @@ public class SystemSettingService : ISystemSettingService
         var setting = await _repository.GetAsync();
         return new PublicSettingResponse
         {
+            CompanyName = setting.CompanyName,
             WebsiteName = setting.WebsiteName,
+            Phone = setting.Phone,
             Copyright = setting.Copyright,
-            SessionTimeoutMinutes = setting.SessionTimeoutMinutes
+            SessionTimeoutMinutes = setting.SessionTimeoutMinutes,
+            Address = setting.Address,
+            Fax = setting.Fax,
+            LineUrl = setting.LineUrl,
+            FacebookUrl = setting.FacebookUrl,
+            GoogleMapUrl = setting.GoogleMapUrl,
+            LogoUrl = setting.LogoUrl
         };
     }
 
@@ -48,6 +62,12 @@ public class SystemSettingService : ISystemSettingService
         setting.TaxId = request.TaxId;
         setting.Copyright = request.Copyright;
         setting.SessionTimeoutMinutes = request.SessionTimeoutMinutes;
+        setting.Address = request.Address;
+        setting.Fax = request.Fax;
+        setting.LineUrl = request.LineUrl;
+        setting.FacebookUrl = request.FacebookUrl;
+        setting.GoogleMapUrl = request.GoogleMapUrl;
+        setting.LogoUrl = request.LogoUrl;
         await _repository.UpdateAsync(setting);
 
         return new SystemSettingResponse
@@ -59,6 +79,12 @@ public class SystemSettingService : ISystemSettingService
             TaxId = setting.TaxId,
             Copyright = setting.Copyright,
             SessionTimeoutMinutes = setting.SessionTimeoutMinutes,
+            Address = setting.Address,
+            Fax = setting.Fax,
+            LineUrl = setting.LineUrl,
+            FacebookUrl = setting.FacebookUrl,
+            GoogleMapUrl = setting.GoogleMapUrl,
+            LogoUrl = setting.LogoUrl,
             UpdatedAt = setting.UpdatedAt
         };
     }
