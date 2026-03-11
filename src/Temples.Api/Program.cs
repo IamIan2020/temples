@@ -7,6 +7,7 @@ using Temples.Core.Entities;
 using FluentValidation;
 using Temples.Api.Middleware;
 using Temples.Core.Validators.Auth;
+using Temples.Core.Constants;
 using Temples.Infrastructure;
 using Temples.Infrastructure.Data;
 using static Temples.Infrastructure.Data.SeedData;
@@ -18,7 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // ASP.NET Core Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
@@ -55,7 +56,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization();
+// Policy-based 授權：每個權限對應一個 Policy，SystemAdmin 永遠通過
+builder.Services.AddAuthorization(options =>
+{
+    foreach (var permission in Permissions.All)
+    {
+        options.AddPolicy(permission, policy =>
+            policy.RequireAssertion(context =>
+                context.User.IsInRole("SystemAdmin") ||
+                context.User.HasClaim("permission", permission)));
+    }
+});
 
 // CORS
 builder.Services.AddCors(options =>

@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Temples.Core.Constants;
 using Temples.Core.DTOs;
 using Temples.Core.DTOs.Settings;
 using Temples.Core.Interfaces;
@@ -27,7 +28,7 @@ public class SystemSettingsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "SystemAdmin")]
+    [Authorize(Policy = Permissions.SettingsView)]
     public async Task<IActionResult> GetSettings()
     {
         var result = await _settingService.GetSettingsAsync();
@@ -35,7 +36,7 @@ public class SystemSettingsController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Roles = "SystemAdmin")]
+    [Authorize(Policy = Permissions.SettingsEdit)]
     public async Task<IActionResult> UpdateSettings(
         [FromBody] UpdateSystemSettingRequest request,
         [FromServices] IValidator<UpdateSystemSettingRequest> validator)

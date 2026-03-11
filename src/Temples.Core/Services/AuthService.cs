@@ -15,17 +15,20 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly IConfiguration _configuration;
     private readonly IEmailService _emailService;
 
     public AuthService(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
+        RoleManager<ApplicationRole> roleManager,
         IConfiguration configuration,
         IEmailService emailService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _roleManager = roleManager;
         _configuration = configuration;
         _emailService = emailService;
     }
@@ -119,7 +122,22 @@ public class AuthService : IAuthService
         var expirationMinutes = int.Parse(_configuration["Jwt:AccessTokenExpirationMinutes"] ?? "15");
         var expiresAt = DateTime.UtcNow.AddMinutes(expirationMinutes);
 
-        var accessToken = GenerateJwtToken(user, roles, expiresAt);
+        // 收集所有角色的 permission claims
+        var permissions = new HashSet<string>();
+        foreach (var roleName in roles)
+        {
+            var role = await _roleManager.FindByNameAsync(roleName);
+            if (role != null)
+            {
+                var roleClaims = await _roleManager.GetClaimsAsync(role);
+                foreach (var claim in roleClaims.Where(c => c.Type == "permission"))
+                {
+                    permissions.Add(claim.Value);
+                }
+            }
+        }
+
+        var accessToken = GenerateJwtToken(user, roles, permissions, expiresAt);
         var refreshToken = GenerateRefreshToken(user);
 
         return new LoginResponse
@@ -132,12 +150,13 @@ public class AuthService : IAuthService
                 Id = user.Id,
                 Email = user.Email!,
                 DisplayName = user.DisplayName,
-                Roles = roles.ToList()
+                Roles = roles.ToList(),
+                Permissions = permissions.ToList()
             }
         };
     }
 
-    private string GenerateJwtToken(ApplicationUser user, IList<string> roles, DateTime expiresAt)
+    private string GenerateJwtToken(ApplicationUser user, IList<string> roles, IEnumerable<string> permissions, DateTime expiresAt)
     {
         var key = _configuration["Jwt:Key"]!;
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
@@ -153,6 +172,9 @@ public class AuthService : IAuthService
 
         foreach (var role in roles)
             claims.Add(new Claim(ClaimTypes.Role, role));
+
+        foreach (var permission in permissions)
+            claims.Add(new Claim("permission", permission));
 
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],

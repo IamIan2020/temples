@@ -6,6 +6,7 @@ using Temples.Core.Entities;
 using Temples.Core.Interfaces;
 using Temples.Core.Services;
 using Temples.Tests.Helpers;
+using System.Security.Claims;
 
 namespace Temples.Tests;
 
@@ -13,6 +14,7 @@ public class AuthServiceTests
 {
     private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
     private readonly Mock<SignInManager<ApplicationUser>> _signInManagerMock;
+    private readonly Mock<RoleManager<ApplicationRole>> _roleManagerMock;
     private readonly Mock<IEmailService> _emailServiceMock;
     private readonly AuthService _authService;
 
@@ -20,12 +22,20 @@ public class AuthServiceTests
     {
         _userManagerMock = MockHelpers.CreateMockUserManager();
         _signInManagerMock = MockHelpers.CreateMockSignInManager(_userManagerMock);
+        _roleManagerMock = MockHelpers.CreateMockRoleManager();
         _emailServiceMock = new Mock<IEmailService>();
         var config = MockHelpers.CreateTestConfiguration();
+
+        // 預設：任何角色名稱都回傳一個 ApplicationRole，且無 claims
+        _roleManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
+            .ReturnsAsync((string name) => new ApplicationRole { Name = name });
+        _roleManagerMock.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationRole>()))
+            .ReturnsAsync(new List<Claim>());
 
         _authService = new AuthService(
             _userManagerMock.Object,
             _signInManagerMock.Object,
+            _roleManagerMock.Object,
             config,
             _emailServiceMock.Object);
     }

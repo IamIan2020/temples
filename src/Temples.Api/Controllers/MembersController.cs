@@ -2,6 +2,7 @@ using System.Security.Claims;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Temples.Core.Constants;
 using Temples.Core.DTOs;
 using Temples.Core.DTOs.Members;
 using Temples.Core.Interfaces;
@@ -65,7 +66,7 @@ public class MembersController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "SystemAdmin,WebAdmin")]
+    [Authorize(Policy = Permissions.MembersView)]
     public async Task<IActionResult> GetMemberList([FromQuery] MemberListRequest request)
     {
         var result = await _memberService.GetMemberListAsync(request);
@@ -73,7 +74,7 @@ public class MembersController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = "SystemAdmin,WebAdmin")]
+    [Authorize(Policy = Permissions.MembersView)]
     public async Task<IActionResult> GetMemberById(string id)
     {
         try
@@ -88,7 +89,7 @@ public class MembersController : ControllerBase
     }
 
     [HttpPut("{id}/role")]
-    [Authorize(Roles = "SystemAdmin")]
+    [Authorize(Policy = Permissions.MembersEdit)]
     public async Task<IActionResult> ChangeRole(
         string id,
         [FromBody] ChangeRoleRequest request,
@@ -114,7 +115,7 @@ public class MembersController : ControllerBase
     }
 
     [HttpPut("{id}/status")]
-    [Authorize(Roles = "SystemAdmin,WebAdmin")]
+    [Authorize(Policy = Permissions.MembersEdit)]
     public async Task<IActionResult> ChangeStatus(string id, [FromBody] ChangeStatusRequest request)
     {
         try
@@ -133,7 +134,7 @@ public class MembersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "SystemAdmin,WebAdmin")]
+    [Authorize(Policy = Permissions.MembersDelete)]
     public async Task<IActionResult> SoftDelete(string id)
     {
         try

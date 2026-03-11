@@ -4,7 +4,7 @@ using Temples.Core.Entities;
 
 namespace Temples.Infrastructure.Data;
 
-public class AppDbContext : IdentityDbContext<ApplicationUser>
+public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
     public DbSet<SystemSetting> SystemSettings { get; set; } = null!;
 

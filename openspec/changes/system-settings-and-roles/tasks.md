@@ -32,17 +32,17 @@
 
 ## 4. 權限管理 - 後端
 
-- [ ] 4.1 建立 Permissions 權限常數類別（members.view/edit/delete, settings.view/edit, roles.manage + 群組定義）
-- [ ] 4.2 建立 ApplicationRole 實體（繼承 IdentityRole，加 Description, IsBuiltIn）
-- [ ] 4.3 修改 AppDbContext 改用 ApplicationRole + 修改 Program.cs Identity 設定
-- [ ] 4.4 修改 SeedData 使用 ApplicationRole 建立內建角色 + 設定預設 RoleClaims
-- [ ] 4.5 建立 Role DTOs（RoleResponse, CreateRoleRequest, UpdateRoleRequest, PermissionGroupResponse）
-- [ ] 4.6 建立 IRoleService 介面與 RoleService 實作（CRUD + 權限管理）
-- [ ] 4.7 建立 Role Validators（CreateRoleRequestValidator, UpdateRoleRequestValidator）
-- [ ] 4.8 建立 RolesController（GET/POST/PUT/DELETE /api/roles, GET /api/roles/permissions）
-- [ ] 4.9 修改 AuthService：JWT Token 加入 permission claims + LoginResponse 加入 permissions
-- [ ] 4.10 設定 Policy-based 授權（Program.cs AddAuthorization + 更新 MembersController 和 SystemSettingsController）
-- [ ] 4.11 註冊 DI + 建立 EF Migration + 驗證 dotnet build
+- [x] 4.1 建立 Permissions 權限常數類別（members.view/edit/delete, settings.view/edit, roles.manage + 群組定義）
+- [x] 4.2 建立 ApplicationRole 實體（繼承 IdentityRole，加 Description, IsBuiltIn）
+- [x] 4.3 修改 AppDbContext 改用 ApplicationRole + 修改 Program.cs Identity 設定
+- [x] 4.4 修改 SeedData 使用 ApplicationRole 建立內建角色 + 設定預設 RoleClaims
+- [x] 4.5 建立 Role DTOs（RoleResponse, CreateRoleRequest, UpdateRoleRequest, PermissionGroupResponse）
+- [x] 4.6 建立 IRoleService 介面與 RoleService 實作（CRUD + 權限管理）
+- [x] 4.7 建立 Role Validators（CreateRoleRequestValidator, UpdateRoleRequestValidator）
+- [x] 4.8 建立 RolesController（GET/POST/PUT/DELETE /api/roles, GET /api/roles/permissions）
+- [x] 4.9 修改 AuthService：JWT Token 加入 permission claims + LoginResponse 加入 permissions
+- [x] 4.10 設定 Policy-based 授權（Program.cs AddAuthorization + 更新 MembersController 和 SystemSettingsController）
+- [x] 4.11 註冊 DI + 建立 EF Migration + 驗證 dotnet build
 
 ## 5. 權限管理 - 前端
 

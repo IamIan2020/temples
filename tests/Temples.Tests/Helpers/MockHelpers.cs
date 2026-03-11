@@ -27,6 +27,13 @@ public static class MockHelpers
             null!, null!, null!, null!);
     }
 
+    public static Mock<RoleManager<ApplicationRole>> CreateMockRoleManager()
+    {
+        var store = new Mock<IRoleStore<ApplicationRole>>();
+        return new Mock<RoleManager<ApplicationRole>>(
+            store.Object, null!, null!, null!, null!);
+    }
+
     public static IConfiguration CreateTestConfiguration()
     {
         var config = new Dictionary<string, string?>
