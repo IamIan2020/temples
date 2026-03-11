@@ -18,6 +18,7 @@ public class UploadController : ControllerBase
     }
 
     [HttpPost("image")]
+    [RequestSizeLimit(10 * 1024 * 1024)] // 10MB
     public async Task<IActionResult> UploadImage(IFormFile file)
     {
         try

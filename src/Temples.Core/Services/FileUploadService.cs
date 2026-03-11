@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Temples.Core.Interfaces;
@@ -37,5 +38,30 @@ public class FileUploadService : IFileUploadService
         await file.CopyToAsync(stream);
 
         return $"/uploads/{subfolder}/{fileName}";
+    }
+
+    public void CleanupUnusedImages(string? oldHtml, string? newHtml)
+    {
+        var oldUrls = ExtractImageUrls(oldHtml);
+        var newUrls = ExtractImageUrls(newHtml);
+
+        var removed = oldUrls.Except(newUrls);
+        foreach (var url in removed)
+        {
+            // 只刪除 /uploads/ 開頭的本站圖片
+            if (!url.StartsWith("/uploads/")) continue;
+            var filePath = Path.Combine(_env.WebRootPath, url.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+            if (File.Exists(filePath))
+            {
+                try { File.Delete(filePath); } catch { /* 忽略刪除失敗 */ }
+            }
+        }
+    }
+
+    private static HashSet<string> ExtractImageUrls(string? html)
+    {
+        if (string.IsNullOrEmpty(html)) return [];
+        var matches = Regex.Matches(html, @"<img[^>]+src=""([^""]+)""", RegexOptions.IgnoreCase);
+        return matches.Select(m => m.Groups[1].Value).ToHashSet();
     }
 }

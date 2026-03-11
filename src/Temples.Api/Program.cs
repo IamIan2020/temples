@@ -14,6 +14,12 @@ using static Temples.Infrastructure.Data.SeedData;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 設定上傳檔案大小限制
+builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10MB
+});
+
 // PostgreSQL + EF Core
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

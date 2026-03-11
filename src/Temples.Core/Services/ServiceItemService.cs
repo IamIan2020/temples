@@ -7,10 +7,12 @@ namespace Temples.Core.Services;
 public class ServiceItemService : IServiceItemService
 {
     private readonly IServiceItemRepository _repository;
+    private readonly IFileUploadService _fileUploadService;
 
-    public ServiceItemService(IServiceItemRepository repository)
+    public ServiceItemService(IServiceItemRepository repository, IFileUploadService fileUploadService)
     {
         _repository = repository;
+        _fileUploadService = fileUploadService;
     }
 
     public async Task<List<ServiceItemResponse>> GetAllAsync()
@@ -58,6 +60,8 @@ public class ServiceItemService : IServiceItemService
     {
         var item = await _repository.GetByIdAsync(id);
         if (item == null) return null;
+
+        var oldHtml = item.HtmlContent;
 
         item.HeaderImage = request.HeaderImage;
         item.Title = request.Title;
@@ -117,6 +121,10 @@ public class ServiceItemService : IServiceItemService
         }
 
         await _repository.UpdateAsync(item);
+
+        // 清理被移除的圖片
+        _fileUploadService.CleanupUnusedImages(oldHtml, request.HtmlContent);
+
         return MapToResponse(item);
     }
 
