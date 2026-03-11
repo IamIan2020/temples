@@ -12,13 +12,24 @@ const router = createRouter({
       children: [
         {
           path: '',
-          redirect: '/profile',
+          name: 'Home',
+          component: () => import('../views/public/HomeView.vue'),
         },
         {
           path: 'profile',
           name: 'Profile',
           component: () => import('../views/public/ProfileView.vue'),
           meta: { requiresAuth: true },
+        },
+        {
+          path: 'services',
+          name: 'ServiceItems',
+          component: () => import('../views/public/ServiceItemsView.vue'),
+        },
+        {
+          path: 'services/:id',
+          name: 'ServiceItemDetail',
+          component: () => import('../views/public/ServiceItemDetailView.vue'),
         },
       ],
     },
