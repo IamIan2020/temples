@@ -2,6 +2,9 @@
   <el-container style="min-height: 100vh">
     <el-aside width="220px" style="background: #304156">
       <div style="padding: 20px; text-align: center; color: #fff; font-size: 18px; font-weight: bold">
+        {{ settingsStore.websiteName }}
+      </div>
+      <div style="padding: 0 20px 10px; text-align: center; color: #bfcbd9; font-size: 12px">
         管理後台
       </div>
       <el-menu
@@ -15,6 +18,14 @@
           <el-icon><UserFilled /></el-icon>
           <span>會員管理</span>
         </el-menu-item>
+        <el-sub-menu v-if="authStore.isSystemAdmin" index="system-management">
+          <template #title>
+            <el-icon><Setting /></el-icon>
+            <span>系統管理</span>
+          </template>
+          <el-menu-item index="/backstage/settings">系統設定</el-menu-item>
+          <el-menu-item index="/backstage/roles">權限群組</el-menu-item>
+        </el-sub-menu>
       </el-menu>
     </el-aside>
 
@@ -35,11 +46,13 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
-import { UserFilled } from '@element-plus/icons-vue'
+import { useSettingsStore } from '../../stores/settings'
+import { UserFilled, Setting } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const settingsStore = useSettingsStore()
 
 const handleLogout = () => {
   authStore.logout()

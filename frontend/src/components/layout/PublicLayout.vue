@@ -2,7 +2,7 @@
   <el-container style="min-height: 100vh">
     <el-header style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #dcdfe6; background: #fff">
       <router-link to="/" style="text-decoration: none; color: inherit">
-        <h3 style="margin: 0">宮廟系統</h3>
+        <h3 style="margin: 0">{{ settingsStore.websiteName }}</h3>
       </router-link>
       <div style="display: flex; align-items: center; gap: 12px">
         <template v-if="authStore.isAuthenticated">
@@ -28,9 +28,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
+import { useSettingsStore } from '../../stores/settings'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const settingsStore = useSettingsStore()
 
 const handleLogout = () => {
   authStore.logout()

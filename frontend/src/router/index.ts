@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import { useSettingsStore } from '../stores/settings'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -73,6 +74,11 @@ const router = createRouter({
           name: 'MemberDetail',
           component: () => import('../views/backstage/MemberDetailView.vue'),
         },
+        {
+          path: 'settings',
+          name: 'SystemSettings',
+          component: () => import('../views/backstage/SystemSettingsView.vue'),
+        },
       ],
     },
   ],
@@ -109,6 +115,13 @@ router.beforeEach((to, _from, next) => {
   }
 
   next()
+})
+
+// 更新頁面標題
+router.afterEach((to) => {
+  const settingsStore = useSettingsStore()
+  const title = to.name ? `${String(to.name)} - ${settingsStore.websiteName}` : settingsStore.websiteName
+  document.title = title
 })
 
 export default router

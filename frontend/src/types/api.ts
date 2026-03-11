@@ -97,3 +97,30 @@ export interface ChangeRoleRequest {
 export interface ChangeStatusRequest {
   isActive: boolean
 }
+
+// Settings DTOs
+export interface PublicSettingResponse {
+  websiteName: string
+  copyright: string
+  sessionTimeoutMinutes: number
+}
+
+export interface SystemSettingResponse {
+  id: number
+  companyName: string
+  websiteName: string
+  phone: string | null
+  taxId: string | null
+  copyright: string
+  sessionTimeoutMinutes: number
+  updatedAt: string
+}
+
+export interface UpdateSystemSettingRequest {
+  companyName: string
+  websiteName: string
+  phone: string | null
+  taxId: string | null
+  copyright: string
+  sessionTimeoutMinutes: number
+}

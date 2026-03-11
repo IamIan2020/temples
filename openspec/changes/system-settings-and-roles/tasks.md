@@ -12,15 +12,15 @@
 
 ## 2. 系統設定 - 前端
 
-- [ ] 2.1 定義 TypeScript 類型（PublicSettingResponse, SystemSettingResponse, UpdateSystemSettingRequest）
-- [ ] 2.2 建立 settings API service（getPublicSettings, getSettings, updateSettings）
-- [ ] 2.3 建立 Settings Pinia Store（loadPublicSettings, localStorage 快取）
-- [ ] 2.4 修改 main.ts 初始化載入公開設定
-- [ ] 2.5 修改 PublicLayout 使用 settingsStore.websiteName 取代硬編碼
-- [ ] 2.6 修改 AdminLayout 標題使用 settingsStore + 新增系統管理子選單
-- [ ] 2.7 建立 SystemSettingsView.vue（el-form 所有設定欄位 + 儲存）
-- [ ] 2.8 新增路由 /backstage/settings + 更新 document.title
-- [ ] 2.9 驗證 npm run build 成功
+- [x] 2.1 定義 TypeScript 類型（PublicSettingResponse, SystemSettingResponse, UpdateSystemSettingRequest）
+- [x] 2.2 建立 settings API service（getPublicSettings, getSettings, updateSettings）
+- [x] 2.3 建立 Settings Pinia Store（loadPublicSettings, localStorage 快取）
+- [x] 2.4 修改 main.ts 初始化載入公開設定
+- [x] 2.5 修改 PublicLayout 使用 settingsStore.websiteName 取代硬編碼
+- [x] 2.6 修改 AdminLayout 標題使用 settingsStore + 新增系統管理子選單
+- [x] 2.7 建立 SystemSettingsView.vue（el-form 所有設定欄位 + 儲存）
+- [x] 2.8 新增路由 /backstage/settings + 更新 document.title
+- [x] 2.9 驗證 npm run build 成功
 
 ## 3. 自動登出
 
