@@ -13,7 +13,7 @@
           v-for="item in serviceItemsStore.items"
           :key="item.id"
           class="service-card"
-          @click="router.push(`/services/${item.id}`)"
+          @click="router.push(`/services?category=${item.id}`)"
         >
           <img
             v-if="item.headerImage"

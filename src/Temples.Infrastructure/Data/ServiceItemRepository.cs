@@ -58,12 +58,43 @@ public class ServiceItemRepository : IServiceItemRepository
     public async Task<ServiceItem?> GetActiveByIdAsync(int id)
     {
         return await _context.ServiceItems
-            .Include(s => s.Options.Where(o => o.IsActive).OrderBy(o => o.SortOrder))
+            .Include(s => s.Options.Where(o => o.IsActive && !o.IsDeleted).OrderBy(o => o.SortOrder))
             .Where(s => s.IsActive)
             .FirstOrDefaultAsync(s => s.Id == id);
     }
 
     public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+
+    // 商品 CRUD
+    public async Task<List<ServiceItemOption>> GetAllProductsAsync()
+    {
+        return await _context.Set<ServiceItemOption>()
+            .Include(o => o.ServiceItem)
+            .Where(o => !o.IsDeleted)
+            .OrderBy(o => o.ServiceItem.SortOrder)
+            .ThenBy(o => o.SortOrder)
+            .ToListAsync();
+    }
+
+    public async Task<ServiceItemOption?> GetProductByIdAsync(int id)
+    {
+        return await _context.Set<ServiceItemOption>()
+            .Include(o => o.ServiceItem)
+            .FirstOrDefaultAsync(o => o.Id == id && !o.IsDeleted);
+    }
+
+    public async Task<ServiceItemOption> CreateProductAsync(ServiceItemOption option)
+    {
+        _context.Set<ServiceItemOption>().Add(option);
+        await _context.SaveChangesAsync();
+        // reload with ServiceItem
+        return (await GetProductByIdAsync(option.Id))!;
+    }
+
+    public async Task UpdateProductAsync(ServiceItemOption option)
     {
         await _context.SaveChangesAsync();
     }

@@ -12,4 +12,10 @@ public interface IServiceItemRepository
     Task<List<ServiceItem>> GetActiveListAsync();
     Task<ServiceItem?> GetActiveByIdAsync(int id);
     Task SaveChangesAsync();
+
+    // 商品 CRUD
+    Task<List<ServiceItemOption>> GetAllProductsAsync();
+    Task<ServiceItemOption?> GetProductByIdAsync(int id);
+    Task<ServiceItemOption> CreateProductAsync(ServiceItemOption option);
+    Task UpdateProductAsync(ServiceItemOption option);
 }

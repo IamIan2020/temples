@@ -45,6 +45,8 @@ public class ServiceItemService : IServiceItemService
                 MaxTotalAmount = o.MaxTotalAmount,
                 SortOrder = o.SortOrder,
                 IsActive = o.IsActive,
+                StartDate = ToUtc(o.StartDate),
+                EndDate = ToUtc(o.EndDate),
             }).ToList()
         };
 
@@ -63,15 +65,16 @@ public class ServiceItemService : IServiceItemService
         item.IsActive = request.IsActive;
         item.HtmlContent = request.HtmlContent;
 
-        // Options 差異更新
-        var existingOptionIds = item.Options.Select(o => o.Id).ToHashSet();
+        // Options 差異更新（只處理未刪除的）
+        var activeOptions = item.Options.Where(o => !o.IsDeleted).ToList();
+        var existingOptionIds = activeOptions.Select(o => o.Id).ToHashSet();
         var requestOptionIds = request.Options.Where(o => o.Id.HasValue).Select(o => o.Id!.Value).ToHashSet();
 
-        // 刪除不在列表中的選項
-        var toDelete = item.Options.Where(o => !requestOptionIds.Contains(o.Id)).ToList();
+        // 軟刪除不在列表中的選項
+        var toDelete = activeOptions.Where(o => !requestOptionIds.Contains(o.Id)).ToList();
         foreach (var opt in toDelete)
         {
-            item.Options.Remove(opt);
+            opt.IsDeleted = true;
         }
 
         // 更新或新增
@@ -90,6 +93,8 @@ public class ServiceItemService : IServiceItemService
                 existing.MaxTotalAmount = reqOpt.MaxTotalAmount;
                 existing.SortOrder = reqOpt.SortOrder;
                 existing.IsActive = reqOpt.IsActive;
+                existing.StartDate = ToUtc(reqOpt.StartDate);
+                existing.EndDate = ToUtc(reqOpt.EndDate);
             }
             else
             {
@@ -105,6 +110,8 @@ public class ServiceItemService : IServiceItemService
                     MaxTotalAmount = reqOpt.MaxTotalAmount,
                     SortOrder = reqOpt.SortOrder,
                     IsActive = reqOpt.IsActive,
+                    StartDate = ToUtc(reqOpt.StartDate),
+                    EndDate = ToUtc(reqOpt.EndDate),
                 });
             }
         }
@@ -155,20 +162,119 @@ public class ServiceItemService : IServiceItemService
             HeaderImage = item.HeaderImage,
             Title = item.Title,
             HtmlContent = item.HtmlContent,
-            Options = item.Options.Select(o => new PublicServiceItemOptionResponse
-            {
-                Id = o.Id,
-                Title = o.Title,
-                Price = o.Price,
-                PriceUnit = o.PriceUnit,
-                SubTitle = o.SubTitle,
-                Description = o.Description,
-                MaxDonorCount = o.MaxDonorCount,
-                MaxTotalAmount = o.MaxTotalAmount,
-                CurrentDonorCount = o.CurrentDonorCount,
-                CurrentTotalAmount = o.CurrentTotalAmount,
-            }).ToList()
+            Options = item.Options
+                .Where(o => !o.IsDeleted && o.IsActive)
+                .Where(o => !o.StartDate.HasValue || o.StartDate.Value <= DateTime.UtcNow)
+                .Where(o => !o.EndDate.HasValue || o.EndDate.Value >= DateTime.UtcNow)
+                .Select(o => new PublicServiceItemOptionResponse
+                {
+                    Id = o.Id,
+                    Title = o.Title,
+                    Price = o.Price,
+                    PriceUnit = o.PriceUnit,
+                    SubTitle = o.SubTitle,
+                    Description = o.Description,
+                    MaxDonorCount = o.MaxDonorCount,
+                    MaxTotalAmount = o.MaxTotalAmount,
+                    CurrentDonorCount = o.CurrentDonorCount,
+                    CurrentTotalAmount = o.CurrentTotalAmount,
+                }).ToList()
         };
+    }
+
+    // 商品 CRUD
+    public async Task<List<ProductResponse>> GetAllProductsAsync()
+    {
+        var options = await _repository.GetAllProductsAsync();
+        return options.Select(MapToProductResponse).ToList();
+    }
+
+    public async Task<ProductResponse?> GetProductByIdAsync(int id)
+    {
+        var option = await _repository.GetProductByIdAsync(id);
+        return option == null ? null : MapToProductResponse(option);
+    }
+
+    public async Task<ProductResponse> CreateProductAsync(CreateProductRequest request)
+    {
+        var option = new ServiceItemOption
+        {
+            ServiceItemId = request.ServiceItemId,
+            Title = request.Title,
+            Price = request.Price,
+            PriceUnit = request.PriceUnit,
+            SubTitle = request.SubTitle,
+            Description = request.Description,
+            MaxDonorCount = request.MaxDonorCount,
+            MaxTotalAmount = request.MaxTotalAmount,
+            SortOrder = request.SortOrder,
+            IsActive = request.IsActive,
+            StartDate = ToUtc(request.StartDate),
+            EndDate = ToUtc(request.EndDate),
+        };
+
+        var created = await _repository.CreateProductAsync(option);
+        return MapToProductResponse(created);
+    }
+
+    public async Task<ProductResponse?> UpdateProductAsync(int id, UpdateProductRequest request)
+    {
+        var option = await _repository.GetProductByIdAsync(id);
+        if (option == null) return null;
+
+        option.ServiceItemId = request.ServiceItemId;
+        option.Title = request.Title;
+        option.Price = request.Price;
+        option.PriceUnit = request.PriceUnit;
+        option.SubTitle = request.SubTitle;
+        option.Description = request.Description;
+        option.MaxDonorCount = request.MaxDonorCount;
+        option.MaxTotalAmount = request.MaxTotalAmount;
+        option.SortOrder = request.SortOrder;
+        option.IsActive = request.IsActive;
+        option.StartDate = ToUtc(request.StartDate);
+        option.EndDate = ToUtc(request.EndDate);
+
+        await _repository.UpdateProductAsync(option);
+        // reload to get updated ServiceItem navigation
+        return await GetProductByIdAsync(id);
+    }
+
+    public async Task<bool> DeleteProductAsync(int id)
+    {
+        var option = await _repository.GetProductByIdAsync(id);
+        if (option == null) return false;
+        option.IsDeleted = true;
+        await _repository.UpdateProductAsync(option);
+        return true;
+    }
+
+    private static ProductResponse MapToProductResponse(ServiceItemOption o) => new()
+    {
+        Id = o.Id,
+        ServiceItemId = o.ServiceItemId,
+        CategoryTitle = o.ServiceItem?.Title ?? "",
+        Title = o.Title,
+        Price = o.Price,
+        PriceUnit = o.PriceUnit,
+        SubTitle = o.SubTitle,
+        Description = o.Description,
+        MaxDonorCount = o.MaxDonorCount,
+        MaxTotalAmount = o.MaxTotalAmount,
+        CurrentDonorCount = o.CurrentDonorCount,
+        CurrentTotalAmount = o.CurrentTotalAmount,
+        SortOrder = o.SortOrder,
+        IsActive = o.IsActive,
+        StartDate = o.StartDate,
+        EndDate = o.EndDate,
+    };
+
+    private static DateTime? ToUtc(DateTime? dt)
+    {
+        if (dt == null) return null;
+        return dt.Value.Kind == DateTimeKind.Unspecified
+            ? DateTime.SpecifyKind(dt.Value, DateTimeKind.Utc)
+            : dt.Value.ToUniversalTime();
     }
 
     private static ServiceItemResponse MapToResponse(ServiceItem item) => new()
@@ -181,7 +287,7 @@ public class ServiceItemService : IServiceItemService
         HtmlContent = item.HtmlContent,
         CreatedAt = item.CreatedAt,
         UpdatedAt = item.UpdatedAt,
-        Options = item.Options.Select(o => new ServiceItemOptionResponse
+        Options = item.Options.Where(o => !o.IsDeleted).Select(o => new ServiceItemOptionResponse
         {
             Id = o.Id,
             Title = o.Title,
@@ -195,6 +301,8 @@ public class ServiceItemService : IServiceItemService
             CurrentTotalAmount = o.CurrentTotalAmount,
             SortOrder = o.SortOrder,
             IsActive = o.IsActive,
+            StartDate = o.StartDate,
+            EndDate = o.EndDate,
         }).ToList()
     };
 }

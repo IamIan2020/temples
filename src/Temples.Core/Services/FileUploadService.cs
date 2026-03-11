@@ -8,7 +8,7 @@ public class FileUploadService : IFileUploadService
 {
     private readonly IWebHostEnvironment _env;
     private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
-    private const long MaxFileSize = 5 * 1024 * 1024; // 5MB
+    private const long MaxFileSize = 10 * 1024 * 1024; // 10MB
 
     public FileUploadService(IWebHostEnvironment env)
     {
@@ -21,7 +21,7 @@ public class FileUploadService : IFileUploadService
             throw new ArgumentException("檔案不可為空");
 
         if (file.Length > MaxFileSize)
-            throw new ArgumentException("檔案大小不得超過 5MB");
+            throw new ArgumentException("檔案大小不得超過 10MB");
 
         var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
         if (!AllowedExtensions.Contains(extension))

@@ -1,8 +1,8 @@
 namespace Temples.Core.DTOs.ServiceItems;
 
-public class UpdateServiceItemOptionRequest
+public class CreateProductRequest
 {
-    public int? Id { get; set; }
+    public int ServiceItemId { get; set; }
     public string Title { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public string? PriceUnit { get; set; }

@@ -18,10 +18,14 @@
           <el-icon><UserFilled /></el-icon>
           <span>會員管理</span>
         </el-menu-item>
-        <el-menu-item v-if="authStore.hasPermission('serviceItems.view')" index="/backstage/service-items">
-          <el-icon><List /></el-icon>
-          <span>服務項目</span>
-        </el-menu-item>
+        <el-sub-menu v-if="authStore.hasPermission('serviceItems.view')" index="service-management">
+          <template #title>
+            <el-icon><List /></el-icon>
+            <span>服務項目</span>
+          </template>
+          <el-menu-item index="/backstage/service-items">分類管理</el-menu-item>
+          <el-menu-item index="/backstage/products">商品管理</el-menu-item>
+        </el-sub-menu>
         <el-sub-menu v-if="authStore.hasPermission('settings.view') || authStore.hasPermission('roles.manage')" index="system-management">
           <template #title>
             <el-icon><Setting /></el-icon>

@@ -26,11 +26,6 @@ const router = createRouter({
           name: 'ServiceItems',
           component: () => import('../views/public/ServiceItemsView.vue'),
         },
-        {
-          path: 'services/:id',
-          name: 'ServiceItemDetail',
-          component: () => import('../views/public/ServiceItemDetailView.vue'),
-        },
       ],
     },
     // 前台公開頁面（不使用 Layout）
@@ -118,16 +113,10 @@ const router = createRouter({
           meta: { permission: 'serviceItems.view' },
         },
         {
-          path: 'service-items/create',
-          name: 'ServiceItemCreate',
-          component: () => import('../views/backstage/ServiceItemDetailView.vue'),
-          meta: { permission: 'serviceItems.edit' },
-        },
-        {
-          path: 'service-items/:id',
-          name: 'ServiceItemEdit',
-          component: () => import('../views/backstage/ServiceItemDetailView.vue'),
-          meta: { permission: 'serviceItems.edit' },
+          path: 'products',
+          name: 'ProductList',
+          component: () => import('../views/backstage/ProductListView.vue'),
+          meta: { permission: 'serviceItems.view' },
         },
       ],
     },

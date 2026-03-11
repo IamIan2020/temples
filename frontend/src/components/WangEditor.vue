@@ -7,7 +7,7 @@
       mode="default"
     />
     <Editor
-      style="height: 400px; overflow-y: hidden"
+      style="height: 400px; overflow-y: auto"
       v-model="valueHtml"
       :defaultConfig="editorConfig"
       mode="default"
@@ -49,7 +49,7 @@ const editorConfig: Partial<IEditorConfig> = {
   placeholder: '請輸入內容...',
   MENU_CONF: {
     uploadImage: {
-      async customUpload(file: File, insertFn: (url: string) => void) {
+      async customUpload(file: File, insertFn: (url: string, alt: string, href: string) => void) {
         const formData = new FormData()
         formData.append('file', file)
         try {
@@ -61,10 +61,12 @@ const editorConfig: Partial<IEditorConfig> = {
           })
           const data = await res.json()
           if (data.success && data.data?.url) {
-            insertFn(data.data.url)
+            insertFn(data.data.url, file.name, data.data.url)
+          } else {
+            alert(data.message || '圖片上傳失敗')
           }
         } catch {
-          console.error('圖片上傳失敗')
+          alert('圖片上傳失敗，請稍後再試')
         }
       },
     },

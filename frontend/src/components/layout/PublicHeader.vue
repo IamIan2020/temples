@@ -15,10 +15,9 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item v-for="item in serviceItems" :key="item.id" :command="`/services/${item.id}`">
+            <el-dropdown-item v-for="item in serviceItems" :key="item.id" :command="`/services?category=${item.id}`">
               {{ item.title }}
             </el-dropdown-item>
-            <el-dropdown-item divided command="/services">查看全部</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

@@ -191,6 +191,8 @@ export interface ServiceItemOptionResponse {
   currentTotalAmount: number
   sortOrder: number
   isActive: boolean
+  startDate: string | null
+  endDate: string | null
 }
 
 export interface ServiceItemResponse {
@@ -215,6 +217,8 @@ export interface CreateServiceItemOptionRequest {
   maxTotalAmount: number | null
   sortOrder: number
   isActive: boolean
+  startDate: string | null
+  endDate: string | null
 }
 
 export interface CreateServiceItemRequest {
@@ -237,6 +241,8 @@ export interface UpdateServiceItemOptionRequest {
   maxTotalAmount: number | null
   sortOrder: number
   isActive: boolean
+  startDate: string | null
+  endDate: string | null
 }
 
 export interface UpdateServiceItemRequest {
@@ -255,6 +261,56 @@ export interface UpdateSortOrderRequest {
 export interface SortOrderItem {
   id: number
   sortOrder: number
+}
+
+// 商品獨立 CRUD
+export interface ProductResponse {
+  id: number
+  serviceItemId: number
+  categoryTitle: string
+  title: string
+  price: number
+  priceUnit: string | null
+  subTitle: string | null
+  description: string | null
+  maxDonorCount: number | null
+  maxTotalAmount: number | null
+  currentDonorCount: number
+  currentTotalAmount: number
+  sortOrder: number
+  isActive: boolean
+  startDate: string | null
+  endDate: string | null
+}
+
+export interface CreateProductRequest {
+  serviceItemId: number
+  title: string
+  price: number
+  priceUnit: string | null
+  subTitle: string | null
+  description: string | null
+  maxDonorCount: number | null
+  maxTotalAmount: number | null
+  sortOrder: number
+  isActive: boolean
+  startDate: string | null
+  endDate: string | null
+}
+
+export interface UpdateProductRequest {
+  serviceItemId: number
+  title: string
+  price: number
+  priceUnit: string | null
+  subTitle: string | null
+  description: string | null
+  maxDonorCount: number | null
+  maxTotalAmount: number | null
+  sortOrder: number
+  isActive: boolean
+  startDate: string | null
+  endDate: string | null
 }
 
 export interface PublicServiceItemResponse {

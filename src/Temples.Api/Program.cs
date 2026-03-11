@@ -43,6 +43,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
+    options.MapInboundClaims = false;
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -55,6 +56,21 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero,
         RoleClaimType = System.Security.Claims.ClaimTypes.Role,
         NameClaimType = System.Security.Claims.ClaimTypes.Name
+    };
+    options.Events = new JwtBearerEvents
+    {
+        OnTokenValidated = context =>
+        {
+            var claims = context.Principal?.Claims.Select(c => $"{c.Type}={c.Value}");
+            Console.WriteLine($"[JWT] Token validated. Claims: {string.Join(", ", claims ?? [])}");
+            Console.WriteLine($"[JWT] IsInRole(SystemAdmin): {context.Principal?.IsInRole("SystemAdmin")}");
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"[JWT] Authentication failed: {context.Exception.Message}");
+            return Task.CompletedTask;
+        }
     };
 });
 

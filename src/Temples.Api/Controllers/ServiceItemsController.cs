@@ -83,6 +83,50 @@ public class ServiceItemsController : ControllerBase
         return Ok(ApiResponse.Ok("排序已更新"));
     }
 
+    // 商品 CRUD
+    [HttpGet("products")]
+    [Authorize(Policy = Permissions.ServiceItemsView)]
+    public async Task<IActionResult> GetAllProducts()
+    {
+        var products = await _service.GetAllProductsAsync();
+        return Ok(ApiResponse<List<ProductResponse>>.Ok(products));
+    }
+
+    [HttpGet("products/{id:int}")]
+    [Authorize(Policy = Permissions.ServiceItemsView)]
+    public async Task<IActionResult> GetProductById(int id)
+    {
+        var product = await _service.GetProductByIdAsync(id);
+        if (product == null) return NotFound(ApiResponse.Fail("找不到該商品"));
+        return Ok(ApiResponse<ProductResponse>.Ok(product));
+    }
+
+    [HttpPost("products")]
+    [Authorize(Policy = Permissions.ServiceItemsEdit)]
+    public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
+    {
+        var product = await _service.CreateProductAsync(request);
+        return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, ApiResponse<ProductResponse>.Ok(product, "商品已建立"));
+    }
+
+    [HttpPut("products/{id:int}")]
+    [Authorize(Policy = Permissions.ServiceItemsEdit)]
+    public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductRequest request)
+    {
+        var product = await _service.UpdateProductAsync(id, request);
+        if (product == null) return NotFound(ApiResponse.Fail("找不到該商品"));
+        return Ok(ApiResponse<ProductResponse>.Ok(product, "商品已更新"));
+    }
+
+    [HttpDelete("products/{id:int}")]
+    [Authorize(Policy = Permissions.ServiceItemsDelete)]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+        var deleted = await _service.DeleteProductAsync(id);
+        if (!deleted) return NotFound(ApiResponse.Fail("找不到該商品"));
+        return Ok(ApiResponse.Ok("商品已刪除"));
+    }
+
     [HttpGet("public")]
     [AllowAnonymous]
     public async Task<IActionResult> GetPublicList()
