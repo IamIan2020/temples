@@ -143,7 +143,7 @@ router.beforeEach((to, _from, next) => {
       return next({ name: 'BackstageLogin' })
     }
     if (!authStore.isAdmin) {
-      return next({ name: 'Profile' })
+      return next({ name: 'Home' })
     }
   }
 
@@ -166,9 +166,9 @@ router.beforeEach((to, _from, next) => {
       if (authStore.isAdmin) {
         return next({ name: 'MemberList' })
       }
-      return next({ name: 'Profile' })
+      return next({ name: 'Home' })
     }
-    return next({ name: 'Profile' })
+    return next({ name: 'Home' })
   }
 
   next()
