@@ -176,3 +176,111 @@ export interface PermissionGroupResponse {
   groupName: string
   permissions: PermissionItem[]
 }
+
+// ServiceItem DTOs
+export interface ServiceItemOptionResponse {
+  id: number
+  title: string
+  price: number
+  priceUnit: string | null
+  subTitle: string | null
+  description: string | null
+  maxDonorCount: number | null
+  maxTotalAmount: number | null
+  currentDonorCount: number
+  currentTotalAmount: number
+  sortOrder: number
+  isActive: boolean
+}
+
+export interface ServiceItemResponse {
+  id: number
+  headerImage: string | null
+  title: string
+  sortOrder: number
+  isActive: boolean
+  htmlContent: string | null
+  createdAt: string
+  updatedAt: string
+  options: ServiceItemOptionResponse[]
+}
+
+export interface CreateServiceItemOptionRequest {
+  title: string
+  price: number
+  priceUnit: string | null
+  subTitle: string | null
+  description: string | null
+  maxDonorCount: number | null
+  maxTotalAmount: number | null
+  sortOrder: number
+  isActive: boolean
+}
+
+export interface CreateServiceItemRequest {
+  headerImage: string | null
+  title: string
+  sortOrder: number
+  isActive: boolean
+  htmlContent: string | null
+  options: CreateServiceItemOptionRequest[]
+}
+
+export interface UpdateServiceItemOptionRequest {
+  id: number | null
+  title: string
+  price: number
+  priceUnit: string | null
+  subTitle: string | null
+  description: string | null
+  maxDonorCount: number | null
+  maxTotalAmount: number | null
+  sortOrder: number
+  isActive: boolean
+}
+
+export interface UpdateServiceItemRequest {
+  headerImage: string | null
+  title: string
+  sortOrder: number
+  isActive: boolean
+  htmlContent: string | null
+  options: UpdateServiceItemOptionRequest[]
+}
+
+export interface UpdateSortOrderRequest {
+  items: SortOrderItem[]
+}
+
+export interface SortOrderItem {
+  id: number
+  sortOrder: number
+}
+
+export interface PublicServiceItemResponse {
+  id: number
+  headerImage: string | null
+  title: string
+  sortOrder: number
+}
+
+export interface PublicServiceItemOptionResponse {
+  id: number
+  title: string
+  price: number
+  priceUnit: string | null
+  subTitle: string | null
+  description: string | null
+  maxDonorCount: number | null
+  maxTotalAmount: number | null
+  currentDonorCount: number
+  currentTotalAmount: number
+}
+
+export interface PublicServiceItemDetailResponse {
+  id: number
+  headerImage: string | null
+  title: string
+  htmlContent: string | null
+  options: PublicServiceItemOptionResponse[]
+}

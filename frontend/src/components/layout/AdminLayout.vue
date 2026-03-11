@@ -18,6 +18,10 @@
           <el-icon><UserFilled /></el-icon>
           <span>會員管理</span>
         </el-menu-item>
+        <el-menu-item v-if="authStore.hasPermission('serviceItems.view')" index="/backstage/service-items">
+          <el-icon><List /></el-icon>
+          <span>服務項目</span>
+        </el-menu-item>
         <el-sub-menu v-if="authStore.hasPermission('settings.view') || authStore.hasPermission('roles.manage')" index="system-management">
           <template #title>
             <el-icon><Setting /></el-icon>
@@ -55,7 +59,7 @@ import { useAuthStore } from '../../stores/auth'
 import { useSettingsStore } from '../../stores/settings'
 import { useIdleTimeout } from '../../composables/useIdleTimeout'
 import IdleWarningDialog from '../IdleWarningDialog.vue'
-import { UserFilled, Setting } from '@element-plus/icons-vue'
+import { UserFilled, Setting, List } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
