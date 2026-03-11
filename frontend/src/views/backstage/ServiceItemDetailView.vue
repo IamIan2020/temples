@@ -2,16 +2,18 @@
   <div>
     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px">
       <el-button @click="router.push('/backstage/service-items')">返回列表</el-button>
-      <h2 style="margin: 0">{{ isEdit ? '編輯服務項目' : '新增服務項目' }}</h2>
+      <h2 style="margin: 0">{{ isEdit ? '編輯分類' : '新增分類' }}</h2>
     </div>
 
     <el-card v-loading="loading" style="max-width: 900px">
       <el-form :model="form" label-width="120px">
-        <el-form-item label="標題" required>
-          <el-input v-model="form.title" placeholder="請輸入服務項目標題" />
+        <el-divider content-position="left">分類資訊</el-divider>
+
+        <el-form-item label="分類名稱" required>
+          <el-input v-model="form.title" placeholder="如：點燈服務、祭改服務、功德主" />
         </el-form-item>
 
-        <el-form-item label="Header 圖片">
+        <el-form-item label="分類圖片">
           <div>
             <img v-if="form.headerImage" :src="form.headerImage" alt="" style="max-height: 120px; margin-bottom: 8px; display: block; border-radius: 4px" />
             <el-upload :show-file-list="false" :before-upload="handleImageUpload" accept=".jpg,.jpeg,.png,.gif,.webp">
@@ -29,11 +31,11 @@
           <el-switch v-model="form.isActive" />
         </el-form-item>
 
-        <el-form-item label="內容">
+        <el-form-item label="分類說明">
           <WangEditor v-model="form.htmlContent" style="width: 100%" />
         </el-form-item>
 
-        <el-divider content-position="left">服務選項</el-divider>
+        <el-divider content-position="left">商品管理</el-divider>
 
         <div v-for="(opt, idx) in form.options" :key="idx" style="border: 1px solid #ebeef5; border-radius: 4px; padding: 16px; margin-bottom: 12px; position: relative">
           <el-button
@@ -48,8 +50,8 @@
 
           <el-row :gutter="12">
             <el-col :span="12">
-              <el-form-item label="選項標題" label-width="100px">
-                <el-input v-model="opt.title" placeholder="標題" />
+              <el-form-item label="商品名稱" label-width="100px">
+                <el-input v-model="opt.title" placeholder="如：光明燈、太歲燈" />
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -82,8 +84,8 @@
           </el-row>
           <el-row :gutter="12">
             <el-col :span="18">
-              <el-form-item label="說明" label-width="100px">
-                <el-input v-model="opt.description" type="textarea" :rows="2" placeholder="選項說明" />
+              <el-form-item label="商品說明" label-width="100px">
+                <el-input v-model="opt.description" type="textarea" :rows="2" placeholder="商品說明" />
               </el-form-item>
             </el-col>
             <el-col :span="3">
@@ -99,7 +101,7 @@
           </el-row>
         </div>
 
-        <el-button style="margin-bottom: 16px" @click="addOption">+ 新增選項</el-button>
+        <el-button style="margin-bottom: 16px" @click="addOption">+ 新增商品</el-button>
 
         <el-form-item>
           <el-button type="primary" :loading="saving" @click="handleSave">儲存</el-button>
@@ -173,7 +175,7 @@ const handleImageUpload = async (file: UploadRawFile) => {
 
 const handleSave = async () => {
   if (!form.value.title) {
-    ElMessage.warning('請填寫標題')
+    ElMessage.warning('請填寫分類名稱')
     return
   }
   saving.value = true
@@ -183,13 +185,13 @@ const handleSave = async () => {
         ...form.value,
         options: form.value.options,
       })
-      ElMessage.success('服務項目已更新')
+      ElMessage.success('分類已更新')
     } else {
       await serviceItemsApi.create({
         ...form.value,
         options: form.value.options.map(({ id: _id, ...rest }) => rest),
       })
-      ElMessage.success('服務項目已建立')
+      ElMessage.success('分類已建立')
     }
     router.push('/backstage/service-items')
   } catch {

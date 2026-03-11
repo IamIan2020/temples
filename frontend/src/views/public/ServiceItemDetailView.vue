@@ -23,7 +23,7 @@
       <div v-if="item.htmlContent" class="service-detail-content" v-html="item.htmlContent" />
 
       <div v-if="item.options.length > 0" class="service-option-list">
-        <h2 style="color: #1a1a2e; margin-bottom: 16px">服務方案</h2>
+        <h2 style="color: #1a1a2e; margin-bottom: 16px">商品項目</h2>
         <div v-for="opt in item.options" :key="opt.id" class="service-option-card">
           <div class="service-option-info">
             <h4>{{ opt.title }}</h4>

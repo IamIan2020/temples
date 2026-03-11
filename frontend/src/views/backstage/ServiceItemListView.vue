@@ -2,7 +2,7 @@
   <div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
       <h2 style="margin: 0">服務項目管理</h2>
-      <el-button type="primary" @click="router.push('/backstage/service-items/create')">新增服務項目</el-button>
+      <el-button type="primary" @click="router.push('/backstage/service-items/create')">新增分類</el-button>
     </div>
 
     <el-card v-loading="loading">
@@ -13,8 +13,8 @@
             <span v-else style="color: #909399">無圖片</span>
           </template>
         </el-table-column>
-        <el-table-column prop="title" label="標題" />
-        <el-table-column label="選項數" width="80" align="center">
+        <el-table-column prop="title" label="分類名稱" />
+        <el-table-column label="商品數" width="80" align="center">
           <template #default="{ row }">{{ row.options.length }}</template>
         </el-table-column>
         <el-table-column prop="sortOrder" label="排序" width="80" align="center" />
@@ -53,7 +53,7 @@ const loadItems = async () => {
     const res = await serviceItemsApi.getAll()
     items.value = res.data.data ?? []
   } catch {
-    ElMessage.error('載入服務項目失敗')
+    ElMessage.error('載入失敗')
   } finally {
     loading.value = false
   }
@@ -61,7 +61,7 @@ const loadItems = async () => {
 
 const handleDelete = async (id: number, title: string) => {
   try {
-    await ElMessageBox.confirm(`確定要刪除「${title}」嗎？`, '確認刪除', {
+    await ElMessageBox.confirm(`確定要刪除「${title}」分類及其所有商品嗎？`, '確認刪除', {
       type: 'warning',
       confirmButtonText: '刪除',
       cancelButtonText: '取消',
