@@ -14,17 +14,17 @@
         active-text-color="#409eff"
         router
       >
-        <el-menu-item index="/backstage/members">
+        <el-menu-item v-if="authStore.hasPermission('members.view')" index="/backstage/members">
           <el-icon><UserFilled /></el-icon>
           <span>會員管理</span>
         </el-menu-item>
-        <el-sub-menu v-if="authStore.isSystemAdmin" index="system-management">
+        <el-sub-menu v-if="authStore.hasPermission('settings.view') || authStore.hasPermission('roles.manage')" index="system-management">
           <template #title>
             <el-icon><Setting /></el-icon>
             <span>系統管理</span>
           </template>
-          <el-menu-item index="/backstage/settings">系統設定</el-menu-item>
-          <el-menu-item index="/backstage/roles">權限群組</el-menu-item>
+          <el-menu-item v-if="authStore.hasPermission('settings.view')" index="/backstage/settings">系統設定</el-menu-item>
+          <el-menu-item v-if="authStore.hasPermission('roles.manage')" index="/backstage/roles">權限群組</el-menu-item>
         </el-sub-menu>
       </el-menu>
     </el-aside>

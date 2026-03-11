@@ -46,12 +46,12 @@
 
 ## 5. 權限管理 - 前端
 
-- [ ] 5.1 定義 TypeScript 類型（RoleResponse, CreateRoleRequest, UpdateRoleRequest, PermissionGroupResponse + UserInfo 加 permissions）
-- [ ] 5.2 建立 roles API service
-- [ ] 5.3 更新 Auth Store（hasPermission 方法，SystemAdmin 永遠 true）
-- [ ] 5.4 建立 RoleListView.vue（角色表格、新增/編輯/刪除按鈕，內建不可刪）
-- [ ] 5.5 建立 RoleDetailView.vue（新增/編輯共用，權限按群組 checkbox 選擇）
-- [ ] 5.6 新增路由（/backstage/roles, /backstage/roles/create, /backstage/roles/:id）
-- [ ] 5.7 更新 AdminLayout 選單權限控制（hasPermission 動態顯示）
-- [ ] 5.8 路由守衛加入權限檢查（route meta permission）
-- [ ] 5.9 驗證 npm run build 成功
+- [x] 5.1 定義 TypeScript 類型（RoleResponse, CreateRoleRequest, UpdateRoleRequest, PermissionGroupResponse + UserInfo 加 permissions）
+- [x] 5.2 建立 roles API service
+- [x] 5.3 更新 Auth Store（hasPermission 方法，SystemAdmin 永遠 true）
+- [x] 5.4 建立 RoleListView.vue（角色表格、新增/編輯/刪除按鈕，內建不可刪）
+- [x] 5.5 建立 RoleDetailView.vue（新增/編輯共用，權限按群組 checkbox 選擇）
+- [x] 5.6 新增路由（/backstage/roles, /backstage/roles/create, /backstage/roles/:id）
+- [x] 5.7 更新 AdminLayout 選單權限控制（hasPermission 動態顯示）
+- [x] 5.8 路由守衛加入權限檢查（route meta permission）
+- [x] 5.9 驗證 npm run build 成功

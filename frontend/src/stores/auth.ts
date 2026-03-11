@@ -13,6 +13,12 @@ export const useAuthStore = defineStore('auth', () => {
     userRoles.value.includes('SystemAdmin') || userRoles.value.includes('WebAdmin')
   )
   const isSystemAdmin = computed(() => userRoles.value.includes('SystemAdmin'))
+  const userPermissions = computed(() => user.value?.permissions ?? [])
+
+  function hasPermission(permission: string): boolean {
+    if (isSystemAdmin.value) return true
+    return userPermissions.value.includes(permission)
+  }
 
   function init() {
     const storedToken = localStorage.getItem('accessToken')
@@ -66,6 +72,8 @@ export const useAuthStore = defineStore('auth', () => {
     userRoles,
     isAdmin,
     isSystemAdmin,
+    userPermissions,
+    hasPermission,
     init,
     login,
     register,

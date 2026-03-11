@@ -31,6 +31,7 @@ export interface UserInfo {
   email: string
   displayName: string
   roles: string[]
+  permissions: string[]
 }
 
 export interface ForgotPasswordRequest {
@@ -123,4 +124,35 @@ export interface UpdateSystemSettingRequest {
   taxId: string | null
   copyright: string
   sessionTimeoutMinutes: number
+}
+
+// Role DTOs
+export interface RoleResponse {
+  id: string
+  name: string
+  description: string | null
+  isBuiltIn: boolean
+  permissions: string[]
+}
+
+export interface CreateRoleRequest {
+  name: string
+  description: string | null
+  permissions: string[]
+}
+
+export interface UpdateRoleRequest {
+  name: string
+  description: string | null
+  permissions: string[]
+}
+
+export interface PermissionItem {
+  code: string
+  displayName: string
+}
+
+export interface PermissionGroupResponse {
+  groupName: string
+  permissions: PermissionItem[]
 }

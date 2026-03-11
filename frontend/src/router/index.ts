@@ -68,16 +68,37 @@ const router = createRouter({
           path: 'members',
           name: 'MemberList',
           component: () => import('../views/backstage/MemberListView.vue'),
+          meta: { permission: 'members.view' },
         },
         {
           path: 'members/:id',
           name: 'MemberDetail',
           component: () => import('../views/backstage/MemberDetailView.vue'),
+          meta: { permission: 'members.view' },
         },
         {
           path: 'settings',
           name: 'SystemSettings',
           component: () => import('../views/backstage/SystemSettingsView.vue'),
+          meta: { permission: 'settings.view' },
+        },
+        {
+          path: 'roles',
+          name: 'RoleList',
+          component: () => import('../views/backstage/RoleListView.vue'),
+          meta: { permission: 'roles.manage' },
+        },
+        {
+          path: 'roles/create',
+          name: 'RoleCreate',
+          component: () => import('../views/backstage/RoleDetailView.vue'),
+          meta: { permission: 'roles.manage' },
+        },
+        {
+          path: 'roles/:id',
+          name: 'RoleEdit',
+          component: () => import('../views/backstage/RoleDetailView.vue'),
+          meta: { permission: 'roles.manage' },
         },
       ],
     },
@@ -94,6 +115,13 @@ router.beforeEach((to, _from, next) => {
     }
     if (!authStore.isAdmin) {
       return next({ name: 'Profile' })
+    }
+  }
+
+  // 權限檢查：route meta 中的 permission
+  if (to.meta.permission && typeof to.meta.permission === 'string') {
+    if (!authStore.hasPermission(to.meta.permission)) {
+      return next({ path: '/backstage' })
     }
   }
 
