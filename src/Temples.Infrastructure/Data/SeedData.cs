@@ -57,6 +57,9 @@ public static class SeedData
                 Permissions.MembersView,
                 Permissions.MembersEdit,
                 Permissions.MembersDelete,
+                Permissions.ServiceItemsView,
+                Permissions.ServiceItemsEdit,
+                Permissions.ServiceItemsDelete,
             };
 
             foreach (var permission in webAdminPermissions)

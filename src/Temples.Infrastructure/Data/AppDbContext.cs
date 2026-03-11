@@ -7,6 +7,8 @@ namespace Temples.Infrastructure.Data;
 public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
     public DbSet<SystemSetting> SystemSettings { get; set; } = null!;
+    public DbSet<ServiceItem> ServiceItems { get; set; } = null!;
+    public DbSet<ServiceItemOption> ServiceItemOptions { get; set; } = null!;
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {

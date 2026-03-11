@@ -16,6 +16,8 @@ public static class DependencyInjection
         services.AddScoped<ISystemSettingService, SystemSettingService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IFileUploadService, FileUploadService>();
+        services.AddScoped<IServiceItemRepository, ServiceItemRepository>();
+        services.AddScoped<IServiceItemService, ServiceItemService>();
         return services;
     }
 }

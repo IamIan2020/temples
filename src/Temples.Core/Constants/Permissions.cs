@@ -8,12 +8,16 @@ public static class Permissions
     public const string SettingsView = "settings.view";
     public const string SettingsEdit = "settings.edit";
     public const string RolesManage = "roles.manage";
+    public const string ServiceItemsView = "serviceItems.view";
+    public const string ServiceItemsEdit = "serviceItems.edit";
+    public const string ServiceItemsDelete = "serviceItems.delete";
 
     public static readonly string[] All =
     [
         MembersView, MembersEdit, MembersDelete,
         SettingsView, SettingsEdit,
-        RolesManage
+        RolesManage,
+        ServiceItemsView, ServiceItemsEdit, ServiceItemsDelete
     ];
 
     public static readonly Dictionary<string, (string Code, string DisplayName)[]> Groups = new()
@@ -33,6 +37,12 @@ public static class Permissions
         [
             (RolesManage, "管理角色"),
         ],
+        ["服務項目"] =
+        [
+            (ServiceItemsView, "查看服務項目"),
+            (ServiceItemsEdit, "編輯服務項目"),
+            (ServiceItemsDelete, "刪除服務項目"),
+        ],
     };
 
     public static readonly Dictionary<string, string> DisplayNames = new()
@@ -43,5 +53,8 @@ public static class Permissions
         [SettingsView] = "查看設定",
         [SettingsEdit] = "編輯設定",
         [RolesManage] = "管理角色",
+        [ServiceItemsView] = "查看服務項目",
+        [ServiceItemsEdit] = "編輯服務項目",
+        [ServiceItemsDelete] = "刪除服務項目",
     };
 }
