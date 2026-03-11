@@ -1,41 +1,43 @@
 <template>
   <header class="public-header">
+    <!-- 左側：Logo 圖片，點擊回首頁 -->
     <router-link to="/" class="public-header-brand">
       <img v-if="settingsStore.logoUrl" :src="settingsStore.logoUrl" alt="Logo" />
-      <h1>{{ settingsStore.companyName }}</h1>
+      <div v-else class="public-header-logo-placeholder">&#9753;</div>
     </router-link>
 
+    <!-- 中間：導覽選單 -->
     <nav class="public-header-nav">
-      <router-link to="/">首頁</router-link>
-      <el-dropdown v-if="serviceItems.length > 0" trigger="hover">
-        <router-link to="/services" class="public-header-nav-link" @click.prevent>
-          服務項目 <el-icon style="margin-left: 4px"><ArrowDown /></el-icon>
-        </router-link>
+      <el-dropdown v-if="serviceItems.length > 0" trigger="hover" @command="handleCommand">
+        <span class="public-header-nav-item">
+          服務項目<span class="public-header-nav-sub">Services</span>
+          <el-icon style="margin-left: 6px"><ArrowDown /></el-icon>
+        </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item v-for="item in serviceItems" :key="item.id" @click="router.push(`/services/${item.id}`)">
+            <el-dropdown-item v-for="item in serviceItems" :key="item.id" :command="`/services/${item.id}`">
               {{ item.title }}
             </el-dropdown-item>
-            <el-dropdown-item divided @click="router.push('/services')">查看全部</el-dropdown-item>
+            <el-dropdown-item divided command="/services">查看全部</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <router-link v-else to="/services">服務項目</router-link>
+      <router-link v-else to="/services" class="public-header-nav-item">
+        服務項目<span class="public-header-nav-sub">Services</span>
+      </router-link>
     </nav>
 
+    <!-- 右側：登入/註冊 或 使用者資訊 -->
     <div class="public-header-actions">
       <template v-if="authStore.isAuthenticated">
-        <router-link to="/profile" style="color: #e8d5b7; text-decoration: none">
+        <router-link to="/profile" class="public-header-user">
           {{ authStore.user?.displayName }}
         </router-link>
-        <el-button size="small" @click="handleLogout">登出</el-button>
+        <button class="public-header-auth-btn" @click="handleLogout">登出</button>
       </template>
       <template v-else>
-        <router-link to="/login">
-          <el-button size="small">登入</el-button>
-        </router-link>
-        <router-link to="/register">
-          <el-button size="small" type="primary">註冊</el-button>
+        <router-link to="/login" class="public-header-auth-btn">
+          信眾登入<span class="public-header-auth-sep">|</span>註冊
         </router-link>
       </template>
     </div>
@@ -61,6 +63,10 @@ const emit = defineEmits<{ logout: [] }>()
 const handleLogout = () => {
   authStore.logout()
   emit('logout')
+}
+
+const handleCommand = (path: string) => {
+  router.push(path)
 }
 
 onMounted(async () => {
